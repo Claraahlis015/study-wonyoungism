@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Study Princess</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+background:#ffe6f0;
+font-family:'Poppins',sans-serif;
+text-align:center;
+color:#ff66a3;
+margin:0;
+}
+
+.container{
+margin-top:40px;
+}
+
+.card{
+background:white;
+padding:20px;
+margin:20px auto;
+width:300px;
+border-radius:20px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+input{
+padding:10px;
+border-radius:10px;
+border:1px solid #ffcce0;
+width:70%;
+}
+
+button{
+padding:10px;
+border:none;
+background:#ff99cc;
+color:white;
+border-radius:10px;
+cursor:pointer;
+}
+
+.melody{
+width:100px;
+}
+
+</style>
+</head>
+
+<body>
+
+<audio autoplay loop>
+<source src="old-doll-soft.mp3" type="audio/mp3">
+</audio>
+
+<audio id="meow">
+<source src="meow.mp3" type="audio/mp3">
+</audio>
+
+<div class="container">
+
+<img src="https://i.imgur.com/8QZ7Z4A.png" class="melody">
+
+<h1>Study Princess</h1>
+
+<div class="card">
+<h3>Tarefas</h3>
+<input id="taskInput" placeholder="Nova tarefa...">
+<button onclick="addTask()">+</button>
+<ul id="taskList"></ul>
+</div>
+
+<div class="card">
+<h3>Cronômetro</h3>
+<h1 id="timer">00:00</h1>
+<button onclick="startTimer()">Start</button>
+<button onclick="stopTimer()">Stop</button>
+</div>
+
+</div>
+
+<script>
+
+document.addEventListener("keydown", function(){
+document.getElementById("meow").play();
+});
+
+function addTask(){
+let input = document.getElementById("taskInput");
+let li = document.createElement("li");
+li.textContent = input.value;
+document.getElementById("taskList").appendChild(li);
+input.value="";
+}
+
+let time = 0;
+let running = false;
+
+function startTimer(){
+if(!running){
+running = true;
+setInterval(()=>{
+if(running){
+time++;
+let min = Math.floor(time/60);
+let sec = time%60;
+document.getElementById("timer").innerText =
+(min<10?"0":"")+min+":"+(sec<10?"0":"")+sec;
+}
+},1000);
+}
+}
+
+function stopTimer(){
+running=false;
+}
+
+</script>
+
+</body>
+</html>
