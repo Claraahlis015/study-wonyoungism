@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Study Princess</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+<title>Study Princess Planner</title>
 
 <style>
 
 body{
-background:linear-gradient(to bottom,#ffe6f0,#fff0f7);
-font-family:'Poppins',sans-serif;
+background:linear-gradient(to bottom,#fff7fb,#ffeef7);
+font-family:'Segoe UI', sans-serif;
 text-align:center;
-color:#ff66a3;
+color:#ff80b3;
 margin:0;
 }
 
@@ -21,120 +19,147 @@ margin-top:40px;
 }
 
 .card{
-background:white;
+background:#ffffffcc;
 padding:20px;
 margin:20px auto;
-width:300px;
+width:320px;
 border-radius:25px;
-box-shadow:0 10px 25px rgba(255,182,217,0.4);
-border:2px solid #ffd6eb;
+box-shadow:0 10px 25px rgba(255,182,217,0.2);
+border:1px solid #ffe0f0;
 }
 
-input{
-padding:10px;
-border-radius:10px;
-border:1px solid #ffcce0;
-width:70%;
+button{
+background:linear-gradient(to right,#ffd6eb,#ffe4f2);
+border:none;
+padding:8px 12px;
+border-radius:20px;
+cursor:pointer;
+color:#ff66a3;
+margin:3px;
 }
+
+input, textarea{
+padding:8px;
+border-radius:15px;
+border:1px solid #ffd6eb;
+width:80%;
+margin:5px;
+}
+
 h1{
 font-weight:300;
 letter-spacing:2px;
-}button{
-padding:10px;
-border:none;
-background:#ff99cc;
-color:white;
-border-radius:10px;
-cursor:pointer;
 }
 
 .melody{
-width:100px;
+position:fixed;
+bottom:10px;
+right:10px;
+width:80px;
+opacity:0.8;
 }
 
 </style>
 </head>
 
 <body>
-<button onclick="ativarSom()" style="
-position:fixed;
-top:20px;
-right:20px;
-background:#ffb6d9;
-border:none;
-padding:10px;
-border-radius:15px;
-cursor:pointer;
-">
-🎀 Ativar som
-</button><audio autoplay loop id="music">
-<source src="https://cdn.pixabay.com/audio/2023/03/21/audio_1c8b7a5e1f.mp3" type="audio/mp3">
+
+<audio id="music" autoplay loop>
+<source src="music.mp3" type="audio/mpeg">
 </audio>
+
 <audio id="meow">
-<source src="meow.mp3" type="audio/mp3">
+<source src="meow.mp3" type="audio/mpeg">
 </audio>
 
 <div class="container">
 
-<img src="https://i.imgur.com/8QZ7Z4A.png" class="melody">
+<img src="https://i.imgur.com/dYcYQ7E.png" width="120">
 
 <h1>Study Princess</h1>
 
 <div class="card">
+<h3>Planner do Dia</h3>
+<textarea id="planner" placeholder="O que você precisa fazer hoje?"></textarea>
+<button onclick="savePlanner()">Salvar</button>
+</div>
+
+<div class="card">
 <h3>Tarefas</h3>
-<input id="taskInput" placeholder="Nova tarefa...">
-<button onclick="addTask()">+</button>
+<input id="taskInput" placeholder="Nova tarefa">
+<button onclick="addTask()">Adicionar</button>
 <ul id="taskList"></ul>
 </div>
 
 <div class="card">
-<h3>Cronômetro</h3>
-<h1 id="timer">00:00</h1>
+<h3>Metas</h3>
+<textarea id="goals" placeholder="Suas metas..."></textarea>
+<button onclick="saveGoals()">Salvar</button>
+</div>
+
+<div class="card">
+<h3>Mood</h3>
+<input id="mood" placeholder="Como você está se sentindo?">
+<button onclick="saveMood()">Salvar</button>
+</div>
+
+<div class="card">
+<h3>Pomodoro</h3>
+<p id="timer">25:00</p>
 <button onclick="startTimer()">Start</button>
-<button onclick="stopTimer()">Stop</button>
+<button onclick="resetTimer()">Reset</button>
 </div>
 
 </div>
-function ativarSom(){
-document.getElementById("music").play();
-document.getElementById("meow").play().then(()=>{
-document.getElementById("meow").pause();
-});
-}
+
+<img class="melody" src="https://i.imgur.com/8QZ7Z4A.png">
+
 <script>
 
-document.addEventListener("keydown", function(){
+document.addEventListener("keydown", ()=>{
 document.getElementById("meow").play();
-});
+})
+
+function savePlanner(){
+localStorage.setItem("planner", planner.value);
+}
+
+planner.value = localStorage.getItem("planner") || "";
 
 function addTask(){
-let input = document.getElementById("taskInput");
+let task = taskInput.value;
 let li = document.createElement("li");
-li.textContent = input.value;
-document.getElementById("taskList").appendChild(li);
-input.value="";
+li.textContent = task;
+taskList.appendChild(li);
+taskInput.value="";
 }
 
-let time = 0;
-let running = false;
+function saveGoals(){
+localStorage.setItem("goals", goals.value);
+}
+goals.value = localStorage.getItem("goals") || "";
+
+function saveMood(){
+localStorage.setItem("mood", mood.value);
+}
+mood.value = localStorage.getItem("mood") || "";
+
+let time=1500;
+let timerInterval;
 
 function startTimer(){
-if(!running){
-running = true;
-setInterval(()=>{
-if(running){
-time++;
-let min = Math.floor(time/60);
-let sec = time%60;
-document.getElementById("timer").innerText =
-(min<10?"0":"")+min+":"+(sec<10?"0":"")+sec;
-}
+timerInterval=setInterval(()=>{
+time--;
+let min=Math.floor(time/60);
+let sec=time%60;
+timer.textContent=min+":"+(sec<10?"0":"")+sec;
 },1000);
 }
-}
 
-function stopTimer(){
-running=false;
+function resetTimer(){
+clearInterval(timerInterval);
+time=1500;
+timer.textContent="25:00";
 }
 
 </script>
