@@ -9,7 +9,7 @@
 <style>
 
 body{
-background:#ffe6f0;
+background:linear-gradient(to bottom,#ffe6f0,#fff0f7);
 font-family:'Poppins',sans-serif;
 text-align:center;
 color:#ff66a3;
@@ -25,8 +25,9 @@ background:white;
 padding:20px;
 margin:20px auto;
 width:300px;
-border-radius:20px;
-box-shadow:0 4px 10px rgba(0,0,0,0.1);
+border-radius:25px;
+box-shadow:0 10px 25px rgba(255,182,217,0.4);
+border:2px solid #ffd6eb;
 }
 
 input{
@@ -35,8 +36,10 @@ border-radius:10px;
 border:1px solid #ffcce0;
 width:70%;
 }
-
-button{
+h1{
+font-weight:300;
+letter-spacing:2px;
+}button{
 padding:10px;
 border:none;
 background:#ff99cc;
@@ -53,8 +56,18 @@ width:100px;
 </head>
 
 <body>
-
-<audio autoplay loop id="music">
+<button onclick="ativarSom()" style="
+position:fixed;
+top:20px;
+right:20px;
+background:#ffb6d9;
+border:none;
+padding:10px;
+border-radius:15px;
+cursor:pointer;
+">
+🎀 Ativar som
+</button><audio autoplay loop id="music">
 <source src="https://cdn.pixabay.com/audio/2023/03/21/audio_1c8b7a5e1f.mp3" type="audio/mp3">
 </audio>
 <audio id="meow">
@@ -82,7 +95,12 @@ width:100px;
 </div>
 
 </div>
-
+function ativarSom(){
+document.getElementById("music").play();
+document.getElementById("meow").play().then(()=>{
+document.getElementById("meow").pause();
+});
+}
 <script>
 
 document.addEventListener("keydown", function(){
